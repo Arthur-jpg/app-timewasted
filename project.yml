@@ -1,0 +1,86 @@
+name: timeWasted
+options:
+  bundleIdPrefix: com.arthurschiller
+  deploymentTarget:
+    iOS: "26.0"
+  createIntermediateGroups: true
+
+settings:
+  base:
+    SWIFT_VERSION: "5.9"
+    IPHONEOS_DEPLOYMENT_TARGET: "26.0"
+    MARKETING_VERSION: "1.0"
+    CURRENT_PROJECT_VERSION: "1"
+    DEVELOPMENT_TEAM: "HPQNH8FPNK"
+
+targets:
+  timeWasted:
+    type: application
+    platform: iOS
+    deploymentTarget: "26.0"
+    scheme: {}
+    sources:
+      - path: timeWasted
+      - path: Shared
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.arthurschiller.timeWasteddd
+        CODE_SIGN_ENTITLEMENTS: timeWasted/timeWasted.entitlements
+        INFOPLIST_FILE: timeWasted/Info.plist
+    dependencies:
+      - target: timeWastedWidget
+        embed: true
+      - target: DeviceActivityMonitorExtension
+        embed: true
+      - target: DeviceActivityReportExtension
+        embed: true
+      - sdk: FamilyControls.framework
+      - sdk: DeviceActivity.framework
+      - sdk: ManagedSettings.framework
+      - sdk: _DeviceActivity_SwiftUI.framework
+      - sdk: WidgetKit.framework
+
+  timeWastedWidget:
+    type: app-extension
+    platform: iOS
+    deploymentTarget: "26.0"
+    sources:
+      - path: timeWastedWidget
+      - path: Shared
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.arthurschiller.timeWasteddd.widget
+        CODE_SIGN_ENTITLEMENTS: timeWastedWidget/timeWastedWidget.entitlements
+        INFOPLIST_FILE: timeWastedWidget/Info.plist
+
+  DeviceActivityMonitorExtension:
+    type: app-extension
+    platform: iOS
+    deploymentTarget: "26.0"
+    sources:
+      - path: DeviceActivityMonitorExtension
+      - path: Shared
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.arthurschiller.timeWasteddd.monitor
+        CODE_SIGN_ENTITLEMENTS: DeviceActivityMonitorExtension/DeviceActivityMonitorExtension.entitlements
+        INFOPLIST_FILE: DeviceActivityMonitorExtension/Info.plist
+    dependencies:
+      - sdk: DeviceActivity.framework
+      - sdk: WidgetKit.framework
+
+  DeviceActivityReportExtension:
+    type: extensionkit-extension
+    platform: iOS
+    deploymentTarget: "26.0"
+    sources:
+      - path: DeviceActivityReportExtension
+      - path: Shared
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.arthurschiller.timeWasteddd.report
+        CODE_SIGN_ENTITLEMENTS: DeviceActivityReportExtension/DeviceActivityReportExtension.entitlements
+        INFOPLIST_FILE: DeviceActivityReportExtension/Info.plist
+    dependencies:
+      - sdk: DeviceActivity.framework
+      - sdk: _DeviceActivity_SwiftUI.framework
