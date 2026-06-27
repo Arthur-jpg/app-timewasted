@@ -89,7 +89,7 @@ struct TimeWastedProvider: AppIntentTimelineProvider {
 
     private func makeEntry(configuration: TimeWastedWidgetIntent) -> WidgetEntry {
         let timeframe = configuration.timeframe.timeframe
-        let seconds = SharedDefaults.loadBestAvailableSeconds(for: timeframe)
+        let seconds = SharedDefaults.loadSeconds(for: timeframe)
         let preferences = SharedDefaults.loadUserPreferences()
         let translations = ActivityDatabase.translations(for: seconds, timeframe: timeframe, preferences: preferences)
         let configuredTitle = configuration.customTitle.trimmingCharacters(in: .whitespacesAndNewlines)

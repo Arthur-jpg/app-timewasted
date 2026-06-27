@@ -17,13 +17,16 @@ enum SharedDefaults {
         static let monitorGeneration = "monitorGeneration"
         static let userPreferences = "userPreferences"
         static let userPreferencesRevision = "userPreferencesRevision"
-        static let reportSecondsPrefix = "exactReportSeconds_"
         // Debug keys — written by MonitorExtension to confirm it's running
         static let debugMonitorLastStart = "debug_monitorLastStart"
         static let debugMonitorLastThreshold = "debug_monitorLastThreshold"
         static let debugMonitorLastThresholdTime = "debug_monitorLastThresholdTime"
         static let debugContainerAccessible = "debug_containerAccessible"
         static let debugExtensionInit = "debug_extensionInit"
+        static let debugNotificationLastEvaluation = "debug_notificationLastEvaluation"
+        static let debugNotificationLastAttempt = "debug_notificationLastAttempt"
+        static let debugNotificationLastSuccess = "debug_notificationLastSuccess"
+        static let debugNotificationLastError = "debug_notificationLastError"
     }
 
     static func dateKey(for date: Date = .now) -> String {
@@ -83,43 +86,6 @@ enum SharedDefaults {
         case .month: loadMonthlySeconds()
         case .year: loadYearlySeconds()
         }
-    }
-
-    static func saveReportSeconds(_ seconds: TimeInterval, for timeframe: TimeFrame) {
-        container?.set(seconds, forKey: reportSecondsKey(for: timeframe))
-    }
-
-    static func loadReportSeconds(for timeframe: TimeFrame) -> TimeInterval? {
-        let key = reportSecondsKey(for: timeframe)
-        guard container?.object(forKey: key) != nil else { return nil }
-        return container?.double(forKey: key)
-    }
-
-    static func loadBestAvailableSeconds(for timeframe: TimeFrame) -> TimeInterval {
-        loadReportSeconds(for: timeframe) ?? loadSeconds(for: timeframe)
-    }
-
-    static func clearReportSeconds() {
-        guard let container else { return }
-        for key in container.dictionaryRepresentation().keys where key.hasPrefix(Keys.reportSecondsPrefix) {
-            container.removeObject(forKey: key)
-        }
-    }
-
-    private static func reportSecondsKey(for timeframe: TimeFrame, date: Date = .now) -> String {
-        let calendar = Calendar.current
-        let component: Calendar.Component = switch timeframe {
-        case .day: .day
-        case .week: .weekOfYear
-        case .month: .month
-        case .year: .year
-        }
-        let start = calendar.dateInterval(of: component, for: date)?.start
-            ?? calendar.startOfDay(for: date)
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "en_US_POSIX")
-        formatter.dateFormat = "yyyy-MM-dd"
-        return Keys.reportSecondsPrefix + timeframe.rawValue + "_" + formatter.string(from: start)
     }
 
     private static func loadAccumulatedSeconds(for component: Calendar.Component) -> TimeInterval {

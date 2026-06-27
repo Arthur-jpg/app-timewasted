@@ -60,7 +60,6 @@ final class ScreenTimeManager: ObservableObject {
         }
         SharedDefaults.container?.set(data, forKey: SharedDefaults.Keys.activitySelection)
         SharedDefaults.container?.set(false, forKey: SharedDefaults.Keys.useSampleData)
-        SharedDefaults.clearReportSeconds()
         let appCount = activitySelection.applicationTokens.count
         let catCount = activitySelection.categoryTokens.count
         logger.info("💾 Selection saved — apps: \(appCount), categories: \(catCount)")

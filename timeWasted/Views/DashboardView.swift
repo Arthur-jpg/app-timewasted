@@ -54,17 +54,18 @@ struct DashboardView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    HStack(spacing: 4) {
-                        Button {
-                            showingPreferences = true
-                        } label: {
-                            Image(systemName: "person.crop.circle")
-                        }
-                        Button {
-                            showingPicker = true
-                        } label: {
-                            Image(systemName: "slider.horizontal.3")
-                        }
+                    Button {
+                        showingPreferences = true
+                    } label: {
+                        Image(systemName: "person.crop.circle")
+                    }
+                }
+                ToolbarSpacer(.fixed, placement: .topBarTrailing)
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        showingPicker = true
+                    } label: {
+                        Image(systemName: "slider.horizontal.3")
                     }
                 }
                 ToolbarItem(placement: .topBarLeading) {
@@ -207,6 +208,10 @@ struct DashboardView: View {
         let monitorStart = ud?.object(forKey: SharedDefaults.Keys.debugMonitorLastStart) as? Date
         let lastThreshold = ud?.string(forKey: SharedDefaults.Keys.debugMonitorLastThreshold)
         let lastThresholdTime = ud?.object(forKey: SharedDefaults.Keys.debugMonitorLastThresholdTime) as? Date
+        let notificationEvaluation = ud?.object(forKey: SharedDefaults.Keys.debugNotificationLastEvaluation) as? Date
+        let notificationAttempt = ud?.string(forKey: SharedDefaults.Keys.debugNotificationLastAttempt)
+        let notificationSuccess = ud?.object(forKey: SharedDefaults.Keys.debugNotificationLastSuccess) as? Date
+        let notificationError = ud?.string(forKey: SharedDefaults.Keys.debugNotificationLastError)
         let containerAccessible = ud?.bool(forKey: SharedDefaults.Keys.debugContainerAccessible) ?? false
         let systemAuthStatus = AuthorizationCenter.shared.authorizationStatus
         let fmt = DateFormatter()
@@ -246,6 +251,12 @@ struct DashboardView: View {
                     row("Raw daily seconds", String(format: "%.0fs (%.1f min)", rawDaily, rawDaily / 60))
                     row("isSampleData", manager.summary.isSampleData ? "sim (sem dados reais)" : "não (dados reais)")
                     row("Last updated", fmt.string(from: manager.summary.lastUpdated))
+                }
+                Section("Notificações") {
+                    row("Última avaliação", notificationEvaluation.map { fmt.string(from: $0) } ?? "—")
+                    row("Última tentativa", notificationAttempt ?? "—")
+                    row("Último sucesso", notificationSuccess.map { fmt.string(from: $0) } ?? "—")
+                    row("Último erro", notificationError ?? "—")
                 }
                 Section("Ações") {
                     Button("Forçar refreshSummary") { manager.refreshSummary() }
