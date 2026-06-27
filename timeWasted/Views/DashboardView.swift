@@ -16,8 +16,11 @@ struct DashboardView: View {
     @Environment(\.scenePhase) private var scenePhase
     @State private var selectedTab: TimeFrame = .day
     @State private var showingPicker = false
+    @State private var showingPreferences = false
     @State private var showDebug = false
     @State private var reportEndDate = Date.now
+    @State private var userPreferences = SharedDefaults.loadUserPreferences()
+    @State private var userPreferencesRevision = SharedDefaults.userPreferencesRevision
 
     private var hasSelection: Bool {
         !manager.activitySelection.applicationTokens.isEmpty
@@ -38,17 +41,7 @@ struct DashboardView: View {
 
                     TabView(selection: $selectedTab) {
                         ForEach(TimeFrame.allCases) { frame in
-                            Group {
-                                if hasSelection {
-                                    if frame == selectedTab {
-                                        activityReport(for: frame)
-                                    } else {
-                                        Color.clear
-                                    }
-                                } else {
-                                    TimeFrameView(timeframe: frame, summary: manager.summary)
-                                }
-                            }
+                            tabContent(for: frame)
                                 .tag(frame)
                         }
                     }
@@ -61,10 +54,17 @@ struct DashboardView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button {
-                        showingPicker = true
-                    } label: {
-                        Image(systemName: "slider.horizontal.3")
+                    HStack(spacing: 4) {
+                        Button {
+                            showingPreferences = true
+                        } label: {
+                            Image(systemName: "person.crop.circle")
+                        }
+                        Button {
+                            showingPicker = true
+                        } label: {
+                            Image(systemName: "slider.horizontal.3")
+                        }
                     }
                 }
                 ToolbarItem(placement: .topBarLeading) {
@@ -77,6 +77,9 @@ struct DashboardView: View {
             }
             .sheet(isPresented: $showingPicker) {
                 appPickerSheet
+            }
+            .sheet(isPresented: $showingPreferences, onDismiss: refreshUserPreferences) {
+                ActivityPreferencesView()
             }
             .sheet(isPresented: $showDebug) {
                 debugSheet
@@ -132,18 +135,37 @@ struct DashboardView: View {
         .buttonStyle(.plain)
     }
 
+    @ViewBuilder
+    private func tabContent(for frame: TimeFrame) -> some View {
+        if hasSelection {
+            if frame == selectedTab {
+                activityReport(for: frame)
+            } else {
+                Color.clear
+            }
+        } else {
+            TimeFrameView(timeframe: frame, summary: manager.summary, preferences: userPreferences)
+        }
+    }
+
     private func activityReport(for timeframe: TimeFrame) -> some View {
         DeviceActivityReport(
             timeframe.reportContext,
             filter: DeviceActivityFilter(
-                segment: .daily(during: timeframe.reportInterval(endingAt: reportEndDate)),
+                segment: timeframe.reportSegment(endingAt: reportEndDate),
                 devices: .init([.iPhone]),
                 applications: manager.activitySelection.applicationTokens,
                 categories: manager.activitySelection.categoryTokens,
                 webDomains: manager.activitySelection.webDomainTokens
             )
         )
-        .id("\(timeframe.rawValue)-\(Int(reportEndDate.timeIntervalSince1970 / 60))")
+        .id("preferences-\(userPreferencesRevision)-\(timeframe.rawValue)-\(reportEndDate.timeIntervalSinceReferenceDate)")
+    }
+
+    private func refreshUserPreferences() {
+        userPreferences = SharedDefaults.loadUserPreferences()
+        userPreferencesRevision = SharedDefaults.userPreferencesRevision
+        reportEndDate = .now
     }
 
     private var tabSelector: some View {
@@ -298,5 +320,20 @@ private extension TimeFrame {
             return DateInterval(start: calendar.startOfDay(for: endDate), end: endDate)
         }
         return DateInterval(start: period.start, end: min(endDate, period.end))
+    }
+
+    func reportSegment(endingAt endDate: Date) -> DeviceActivityFilter.SegmentInterval {
+        let interval = reportInterval(endingAt: endDate)
+
+        // A yearly query split into daily segments can be truncated by the
+        // Screen Time report service to its most recent window. Weekly
+        // segments keep the full year in a much smaller result set, while the
+        // summed application durations remain unchanged.
+        switch self {
+        case .year:
+            return .weekly(during: interval)
+        case .day, .week, .month:
+            return .daily(during: interval)
+        }
     }
 }

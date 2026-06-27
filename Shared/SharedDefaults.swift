@@ -15,6 +15,8 @@ enum SharedDefaults {
         static let useSampleData = "useSampleData"
         static let monitorConfigurationVersion = "monitorConfigurationVersion"
         static let monitorGeneration = "monitorGeneration"
+        static let userPreferences = "userPreferences"
+        static let userPreferencesRevision = "userPreferencesRevision"
         // Debug keys — written by MonitorExtension to confirm it's running
         static let debugMonitorLastStart = "debug_monitorLastStart"
         static let debugMonitorLastThreshold = "debug_monitorLastThreshold"
@@ -91,5 +93,23 @@ enum SharedDefaults {
         let weekly = loadWeeklySeconds()
         let dailyAvg = weekly > 0 ? weekly / 7 : daily
         return dailyAvg * 365
+    }
+
+    static func loadUserPreferences() -> UserPreferences {
+        guard
+            let data = container?.data(forKey: Keys.userPreferences),
+            let prefs = try? JSONDecoder().decode(UserPreferences.self, from: data)
+        else { return .default }
+        return prefs
+    }
+
+    static func saveUserPreferences(_ prefs: UserPreferences) {
+        guard let data = try? JSONEncoder().encode(prefs) else { return }
+        container?.set(data, forKey: Keys.userPreferences)
+        container?.set(userPreferencesRevision + 1, forKey: Keys.userPreferencesRevision)
+    }
+
+    static var userPreferencesRevision: Int {
+        container?.integer(forKey: Keys.userPreferencesRevision) ?? 0
     }
 }

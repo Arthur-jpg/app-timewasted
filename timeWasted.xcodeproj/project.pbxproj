@@ -10,14 +10,20 @@
 		0930E9D137B9EE8425D31B5C /* ActivityDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F66277E4ACA1B272C919AE4 /* ActivityDatabase.swift */; };
 		0A62BA50DA4C857D872A3628 /* TimeFrameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD0900786BA71D8A1D4931E6 /* TimeFrameView.swift */; };
 		128F2EF04376B8A6BA5C14F4 /* ActivityDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F66277E4ACA1B272C919AE4 /* ActivityDatabase.swift */; };
+		1E4C69841975DA15924BE79D /* UserPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF1FE916A4ED08A6C63A0C13 /* UserPreferences.swift */; };
+		21E989E978328DD3F0D6C9E2 /* UserPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF1FE916A4ED08A6C63A0C13 /* UserPreferences.swift */; };
 		2338F3E586668DE1494BD134 /* WidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E97033062266541255D2714F /* WidgetView.swift */; };
 		27B62595F04C18A821027020 /* _DeviceActivity_SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F17C8939B4DD3E5D18FB1F4 /* _DeviceActivity_SwiftUI.framework */; };
 		37C83BD956C32CB6DA4F3FA3 /* TimeWastedWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E0E85EB432D9443914B0BB2 /* TimeWastedWidgetBundle.swift */; };
 		40DACF7FF81D2F68AE46C190 /* AppModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EDCD5C46DFCB3FC2A949F07 /* AppModels.swift */; };
+		4650167A33665C7B491EED44 /* ActivityPreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C8A868271E3B58708F7325 /* ActivityPreferencesView.swift */; };
 		4A1B625E830EC86C84CD25B8 /* ActivityCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCA80A89D9EDCB3485900F6E /* ActivityCardView.swift */; };
 		5208483613FB50858BBD054D /* AppModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EDCD5C46DFCB3FC2A949F07 /* AppModels.swift */; };
+		58D5691CC7C00DDF17FF79C5 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 13F3667E2B902D824C42A295 /* WidgetKit.framework */; };
 		65F9369E4A98B940752D6D92 /* ActivityDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F66277E4ACA1B272C919AE4 /* ActivityDatabase.swift */; };
 		68DC433C5EDC8D3A65AD5E27 /* DeviceActivityReportExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE5C95BD451C76F4A4588389 /* DeviceActivityReportExtension.swift */; };
+		73C0406B25F0DE1E2D1930AD /* CustomActivityFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 467ED59E4A70810CF2EECCFD /* CustomActivityFormView.swift */; };
+		82ACE6A9F7A5DCEA053DF9E4 /* PredictionCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 209FD2BB913F2720C32BE327 /* PredictionCardView.swift */; };
 		83C40381F9C927BF73FFDDD9 /* DeviceActivityReportExtension.appex in Embed ExtensionKit Extensions */ = {isa = PBXBuildFile; fileRef = 5103E2EED5718C69AACE4586 /* DeviceActivityReportExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		91E184ED9CDE3696BC0DFCDC /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 13F3667E2B902D824C42A295 /* WidgetKit.framework */; };
 		9257F68E4DDEF8BE64C17480 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC0EC624A4803E47785251BB /* DashboardView.swift */; };
@@ -26,7 +32,9 @@
 		9AE3161B391747F77FDAE82C /* _DeviceActivity_SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F17C8939B4DD3E5D18FB1F4 /* _DeviceActivity_SwiftUI.framework */; };
 		9E7B735B8DEA4157A6920655 /* TimeWastedWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5E25CCFC6B9A20FDAD260B8 /* TimeWastedWidget.swift */; };
 		A67C348005348AD88E19F915 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64132678E65709A722A036C0 /* ContentView.swift */; };
+		A710CA53F39B38FE6C30F5F8 /* UserPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF1FE916A4ED08A6C63A0C13 /* UserPreferences.swift */; };
 		AD2DEABA078AAD2F0B21C3AC /* SharedDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C2B219660CDF4F8ADD1D6EB /* SharedDefaults.swift */; };
+		B1377E0217817CBF727A2843 /* UserPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF1FE916A4ED08A6C63A0C13 /* UserPreferences.swift */; };
 		B1449FD573EE1EA727E3AB4B /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 174B5CB236E1BBF73ED6B5A2 /* OnboardingView.swift */; };
 		B2EE041189C5A3DADB27E0F8 /* AppModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EDCD5C46DFCB3FC2A949F07 /* AppModels.swift */; };
 		B51060DE411098BBBAEEC319 /* FamilyControls.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B39C2068C7159D420A98F0D /* FamilyControls.framework */; };
@@ -101,11 +109,13 @@
 		13F3667E2B902D824C42A295 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		174B5CB236E1BBF73ED6B5A2 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		1B39C2068C7159D420A98F0D /* FamilyControls.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FamilyControls.framework; path = System/Library/Frameworks/FamilyControls.framework; sourceTree = SDKROOT; };
+		209FD2BB913F2720C32BE327 /* PredictionCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PredictionCardView.swift; sourceTree = "<group>"; };
 		2ABE566B0ECE931FD25C050A /* DeviceActivityMonitorExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = DeviceActivityMonitorExtension.entitlements; sourceTree = "<group>"; };
 		31EE2213C315B014752CC1D6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		3792DF88DB74267CAD6EB4DE /* DeviceActivityReportExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = DeviceActivityReportExtension.entitlements; sourceTree = "<group>"; };
 		3B32865C128464508BFA79D6 /* timeWastedWidget.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = timeWastedWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F66277E4ACA1B272C919AE4 /* ActivityDatabase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityDatabase.swift; sourceTree = "<group>"; };
+		467ED59E4A70810CF2EECCFD /* CustomActivityFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomActivityFormView.swift; sourceTree = "<group>"; };
 		4F17C8939B4DD3E5D18FB1F4 /* _DeviceActivity_SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = _DeviceActivity_SwiftUI.framework; path = System/Library/Frameworks/_DeviceActivity_SwiftUI.framework; sourceTree = SDKROOT; };
 		5103E2EED5718C69AACE4586 /* DeviceActivityReportExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.extensionkit-extension"; includeInIndex = 0; path = DeviceActivityReportExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		64132678E65709A722A036C0 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -120,10 +130,12 @@
 		A452716A32A8A9ABB34C46DB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AD0900786BA71D8A1D4931E6 /* TimeFrameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeFrameView.swift; sourceTree = "<group>"; };
 		AE5C95BD451C76F4A4588389 /* DeviceActivityReportExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceActivityReportExtension.swift; sourceTree = "<group>"; };
+		B0C8A868271E3B58708F7325 /* ActivityPreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityPreferencesView.swift; sourceTree = "<group>"; };
 		B5E25CCFC6B9A20FDAD260B8 /* TimeWastedWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeWastedWidget.swift; sourceTree = "<group>"; };
 		CB5E9E73BB29E1E3AA35AB8F /* ManagedSettings.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ManagedSettings.framework; path = System/Library/Frameworks/ManagedSettings.framework; sourceTree = SDKROOT; };
 		CC0EC624A4803E47785251BB /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
 		CCA80A89D9EDCB3485900F6E /* ActivityCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityCardView.swift; sourceTree = "<group>"; };
+		CF1FE916A4ED08A6C63A0C13 /* UserPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPreferences.swift; sourceTree = "<group>"; };
 		CF3B909515930326532499C3 /* timeWasted.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = timeWasted.entitlements; sourceTree = "<group>"; };
 		D72B54417A54374CF116272E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		DCBF83C2CCF56E9F58CFD272 /* DeviceActivityMonitorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceActivityMonitorExtension.swift; sourceTree = "<group>"; };
@@ -160,6 +172,7 @@
 				C909A42E0EE20E821072E834 /* DeviceActivity.framework in Frameworks */,
 				E96566F6A082CC6EDA8506C9 /* ManagedSettings.framework in Frameworks */,
 				9AE3161B391747F77FDAE82C /* _DeviceActivity_SwiftUI.framework in Frameworks */,
+				58D5691CC7C00DDF17FF79C5 /* WidgetKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -189,8 +202,11 @@
 			isa = PBXGroup;
 			children = (
 				CCA80A89D9EDCB3485900F6E /* ActivityCardView.swift */,
+				B0C8A868271E3B58708F7325 /* ActivityPreferencesView.swift */,
+				467ED59E4A70810CF2EECCFD /* CustomActivityFormView.swift */,
 				CC0EC624A4803E47785251BB /* DashboardView.swift */,
 				174B5CB236E1BBF73ED6B5A2 /* OnboardingView.swift */,
+				209FD2BB913F2720C32BE327 /* PredictionCardView.swift */,
 				AD0900786BA71D8A1D4931E6 /* TimeFrameView.swift */,
 			);
 			path = Views;
@@ -241,6 +257,7 @@
 				3F66277E4ACA1B272C919AE4 /* ActivityDatabase.swift */,
 				9EDCD5C46DFCB3FC2A949F07 /* AppModels.swift */,
 				7C2B219660CDF4F8ADD1D6EB /* SharedDefaults.swift */,
+				CF1FE916A4ED08A6C63A0C13 /* UserPreferences.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -424,6 +441,7 @@
 				68DC433C5EDC8D3A65AD5E27 /* DeviceActivityReportExtension.swift in Sources */,
 				9491D42FD132486C459F6FEB /* SharedDefaults.swift in Sources */,
 				BA952881BF62C09C3D9C5A8C /* TotalActivityReport.swift in Sources */,
+				1E4C69841975DA15924BE79D /* UserPreferences.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -436,6 +454,7 @@
 				BA3F4BE1B1B9C1D834D832AE /* SharedDefaults.swift in Sources */,
 				9E7B735B8DEA4157A6920655 /* TimeWastedWidget.swift in Sources */,
 				37C83BD956C32CB6DA4F3FA3 /* TimeWastedWidgetBundle.swift in Sources */,
+				21E989E978328DD3F0D6C9E2 /* UserPreferences.swift in Sources */,
 				2338F3E586668DE1494BD134 /* WidgetView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -448,6 +467,7 @@
 				B2EE041189C5A3DADB27E0F8 /* AppModels.swift in Sources */,
 				B7C27376A6830B2394870DAD /* DeviceActivityMonitorExtension.swift in Sources */,
 				AD2DEABA078AAD2F0B21C3AC /* SharedDefaults.swift in Sources */,
+				B1377E0217817CBF727A2843 /* UserPreferences.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -457,13 +477,17 @@
 			files = (
 				4A1B625E830EC86C84CD25B8 /* ActivityCardView.swift in Sources */,
 				65F9369E4A98B940752D6D92 /* ActivityDatabase.swift in Sources */,
+				4650167A33665C7B491EED44 /* ActivityPreferencesView.swift in Sources */,
 				40DACF7FF81D2F68AE46C190 /* AppModels.swift in Sources */,
 				A67C348005348AD88E19F915 /* ContentView.swift in Sources */,
+				73C0406B25F0DE1E2D1930AD /* CustomActivityFormView.swift in Sources */,
 				9257F68E4DDEF8BE64C17480 /* DashboardView.swift in Sources */,
 				B1449FD573EE1EA727E3AB4B /* OnboardingView.swift in Sources */,
+				82ACE6A9F7A5DCEA053DF9E4 /* PredictionCardView.swift in Sources */,
 				CA316CD9F7E7C7A155B4D8DA /* ScreenTimeManager.swift in Sources */,
 				F921A10C95125A5DB3ABE97F /* SharedDefaults.swift in Sources */,
 				0A62BA50DA4C857D872A3628 /* TimeFrameView.swift in Sources */,
+				A710CA53F39B38FE6C30F5F8 /* UserPreferences.swift in Sources */,
 				E9CBEDD0AFEA7FD36B4A240E /* timeWastedApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

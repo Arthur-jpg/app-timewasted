@@ -14,62 +14,54 @@ struct TimeWastedWidgetView: View {
     }
 
     private var smallView: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            HStack {
-                Text("⏱️")
-                    .font(.caption)
-                Text("hoje")
-                    .font(.caption2)
-                    .fontWeight(.semibold)
-                    .foregroundStyle(.secondary)
-                    .textCase(.uppercase)
-            }
-
-            Text("≈ \(formatTime(entry.dailySeconds))")
-                .font(.system(size: 26, weight: .bold, design: .rounded))
-                .minimumScaleFactor(0.7)
-                .lineLimit(1)
-
-            Text("estimativa nas redes sociais")
-                .font(.caption2)
+        VStack(alignment: .leading, spacing: 7) {
+            Text("ENQUANTO VOCÊ GASTAVA TEMPO...")
+                .font(.system(size: 10, weight: .bold))
                 .foregroundStyle(.secondary)
-
-            Divider()
+                .tracking(0.3)
 
             if let first = entry.translations.first {
-                VStack(alignment: .leading, spacing: 2) {
-                    Text("Em vez disso:")
-                        .font(.caption2)
-                        .foregroundStyle(.secondary)
-                    Text("\(first.activity.emoji) \(first.activity.name)" + (first.count > 1 ? " ×\(first.count)" : ""))
-                        .font(.caption)
-                        .fontWeight(.medium)
-                        .lineLimit(2)
+                HStack(alignment: .firstTextBaseline, spacing: 6) {
+                    Text(first.activity.emoji)
+                        .font(.title2)
+                    Text(first.metricValueText)
+                        .font(.system(size: 27, weight: .black, design: .rounded))
+                        .foregroundStyle(.tint)
+                        .minimumScaleFactor(0.65)
+                        .lineLimit(1)
                 }
+
+                Text(first.activity.name)
+                    .font(.subheadline.weight(.semibold))
+                    .lineLimit(2)
+            } else {
+                Text("Escolha o que esse tempo poderia virar.")
+                    .font(.subheadline.weight(.semibold))
+                    .lineLimit(3)
             }
 
             Spacer(minLength: 0)
+
+            Text("≈ \(formatTime(entry.dailySeconds)) nas redes hoje")
+                .font(.caption2)
+                .foregroundStyle(.secondary)
+                .lineLimit(1)
         }
         .padding(14)
     }
 
     private var mediumView: some View {
-        HStack(spacing: 0) {
-            // Left: time display
-            VStack(alignment: .leading, spacing: 6) {
-                Label("Hoje", systemImage: "clock.fill")
-                    .font(.caption)
-                    .fontWeight(.semibold)
+        VStack(alignment: .leading, spacing: 8) {
+            HStack(alignment: .firstTextBaseline) {
+                Text("Enquanto você gastava tempo")
+                    .font(.headline.weight(.bold))
+
+                Spacer(minLength: 8)
+
+                Text("≈ \(formatTime(entry.dailySeconds)) hoje")
+                    .font(.caption.weight(.semibold))
                     .foregroundStyle(.secondary)
-
-                Text("≈ \(formatTime(entry.dailySeconds))")
-                    .font(.system(size: 32, weight: .bold, design: .rounded))
-
-                Text("estimativa nas redes sociais")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-
-                Spacer(minLength: 0)
+                    .lineLimit(1)
 
                 if entry.isSampleData {
                     Text("Exemplo")
@@ -80,35 +72,42 @@ struct TimeWastedWidgetView: View {
                         .foregroundStyle(.orange)
                 }
             }
-            .frame(maxWidth: .infinity)
-            .padding(14)
 
-            Divider()
-                .padding(.vertical, 14)
-
-            // Right: alternatives
-            VStack(alignment: .leading, spacing: 6) {
-                Text("Poderia ter feito")
-                    .font(.caption)
-                    .fontWeight(.semibold)
+            if entry.translations.isEmpty {
+                Text("Configure no app as atividades que poderiam substituir esse tempo.")
+                    .font(.subheadline)
                     .foregroundStyle(.secondary)
-
+            } else {
                 ForEach(entry.translations.prefix(3)) { translation in
-                    HStack(spacing: 6) {
+                    HStack(spacing: 9) {
                         Text(translation.activity.emoji)
-                            .font(.caption)
-                        Text(translation.activity.name + (translation.count > 1 ? " ×\(translation.count)" : ""))
-                            .font(.caption)
-                            .fontWeight(.medium)
+                            .font(.title3)
+                            .frame(width: 26)
+
+                        Text(translation.activity.name)
+                            .font(.subheadline.weight(.semibold))
+                            .lineLimit(1)
+
+                        Spacer(minLength: 6)
+
+                        Text(translation.metricValueText)
+                            .font(.system(.title3, design: .rounded, weight: .black))
+                            .foregroundStyle(.tint)
+                            .minimumScaleFactor(0.65)
                             .lineLimit(1)
                     }
+                    .padding(.horizontal, 9)
+                    .padding(.vertical, 5)
+                    .background(
+                        RoundedRectangle(cornerRadius: 9)
+                            .fill(Color.accentColor.opacity(0.09))
+                    )
                 }
-
-                Spacer(minLength: 0)
             }
-            .frame(maxWidth: .infinity)
-            .padding(14)
+
+            Spacer(minLength: 0)
         }
+        .padding(13)
     }
 }
 

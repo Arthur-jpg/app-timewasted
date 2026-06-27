@@ -3,6 +3,7 @@ import SwiftUI
 struct TimeFrameView: View {
     let timeframe: TimeFrame
     let summary: ScreenTimeSummary
+    var preferences: UserPreferences = .default
 
     private var seconds: TimeInterval { timeframe.seconds(summary) }
 
@@ -22,7 +23,11 @@ struct TimeFrameView: View {
     }
 
     private var translations: [ActivityTranslation] {
-        ActivityDatabase.translations(for: seconds, timeframe: timeframe)
+        ActivityDatabase.translations(for: seconds, timeframe: timeframe, preferences: preferences)
+    }
+
+    private var predictions: [ActivityPrediction] {
+        ActivityDatabase.predictions(for: seconds, timeframe: timeframe, preferences: preferences)
     }
 
     var body: some View {
@@ -31,6 +36,11 @@ struct TimeFrameView: View {
                 timeDisplay
                 if !translations.isEmpty {
                     alternativesSection
+                } else if !preferences.hasAnyPreferences {
+                    emptyPreferencesPrompt
+                }
+                if !predictions.isEmpty {
+                    predictionsSection
                 }
                 Spacer(minLength: 40)
             }
@@ -38,6 +48,27 @@ struct TimeFrameView: View {
             .padding(.top, 24)
         }
     }
+
+    private var emptyPreferencesPrompt: some View {
+        VStack(spacing: 16) {
+            Image(systemName: "person.crop.circle.badge.plus")
+                .font(.system(size: 48))
+                .foregroundStyle(.secondary)
+            Text("Personalize suas comparações")
+                .font(.headline)
+            Text("Toque em \(Image(systemName: "person.crop.circle")) (canto superior direito) para escolher atividades e criar as suas próprias com duração personalizada.")
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
+        }
+        .padding(32)
+        .frame(maxWidth: .infinity)
+        .background(
+            RoundedRectangle(cornerRadius: 20)
+                .fill(.ultraThinMaterial)
+        )
+    }
+
 
     private var timeDisplay: some View {
         VStack(spacing: 8) {
@@ -91,6 +122,18 @@ struct TimeFrameView: View {
 
             ForEach(translations) { translation in
                 ActivityCardView(translation: translation)
+            }
+        }
+    }
+
+    private var predictionsSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Label("Se continuar assim...", systemImage: "chart.line.uptrend.xyaxis")
+                .font(.headline)
+                .foregroundStyle(.secondary)
+
+            ForEach(predictions) { prediction in
+                PredictionCardView(prediction: prediction)
             }
         }
     }

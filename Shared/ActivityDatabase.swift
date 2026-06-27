@@ -26,14 +26,37 @@ enum ActivityDatabase {
         Activity(id: "study_day", name: "Dia de estudo intensivo", emoji: "🎯", durationMinutes: 240, category: .education, detail: "4 horas focadas de estudo"),
     ]
 
-    static func translations(for seconds: TimeInterval, timeframe: TimeFrame) -> [ActivityTranslation] {
+    static func translations(
+        for seconds: TimeInterval,
+        timeframe: TimeFrame,
+        preferences: UserPreferences = .default
+    ) -> [ActivityTranslation] {
         let minutes = seconds / 60
+        let pool = activityPool(for: preferences)
+        let allResults = pool.map { activity in
+            let exactCount = minutes / activity.durationMinutes
+            let count = Int(exactCount)
+            return ActivityTranslation(
+                activity: activity,
+                count: count,
+                exactCount: exactCount,
+                timeframe: timeframe
+            )
+        }
+
+        // Explicitly selected comparisons should never disappear just because
+        // the observed period is shorter than the activity or produces a high
+        // count. Partial activities are represented as a completion percentage.
+        if preferences.hasAnyPreferences {
+            return allResults
+        }
+
         guard minutes >= 1 else { return [] }
 
         var results: [ActivityTranslation] = []
 
-        for activity in all {
-            let count = Int(minutes / activity.durationMinutes)
+        for translation in allResults {
+            let count = translation.count
             guard count >= 1 else { continue }
 
             let isRelevant: Bool
@@ -44,17 +67,14 @@ enum ActivityDatabase {
             case .year: isRelevant = count >= 3
             }
             guard isRelevant else { continue }
-            results.append(ActivityTranslation(activity: activity, count: count, timeframe: timeframe))
+            results.append(translation)
         }
 
-        // Pick 3 from different categories for variety
+        // Default: pick 3 from different categories for variety
         var picked: [ActivityTranslation] = []
         var usedCategories = Set<ActivityCategory>()
-        let sorted = results.sorted { a, b in
-            // Prefer counts that feel meaningful (2-7 range is relatable)
-            let targetCount = timeframe == .day ? 2 : timeframe == .week ? 5 : 10
-            return abs(a.count - targetCount) < abs(b.count - targetCount)
-        }
+        let targetCount = timeframe == .day ? 2 : timeframe == .week ? 5 : 10
+        let sorted = results.sorted { abs($0.count - targetCount) < abs($1.count - targetCount) }
 
         for translation in sorted {
             if !usedCategories.contains(translation.activity.category) {
@@ -64,7 +84,6 @@ enum ActivityDatabase {
             if picked.count == 3 { break }
         }
 
-        // Fill remaining slots if fewer than 3 categories matched
         if picked.count < 3 {
             for translation in sorted where !picked.contains(where: { $0.activity.id == translation.activity.id }) {
                 picked.append(translation)
@@ -73,5 +92,75 @@ enum ActivityDatabase {
         }
 
         return picked
+    }
+
+    static func predictions(
+        for observedSeconds: TimeInterval,
+        timeframe: TimeFrame,
+        preferences: UserPreferences = .default
+    ) -> [ActivityPrediction] {
+        guard observedSeconds > 60 else { return [] }
+
+        let calendar = Calendar.current
+        let daysInMonth = calendar.range(of: .day, in: .month, for: .now)?.count ?? 30
+        let dayOfMonth = max(1, calendar.component(.day, from: .now))
+        let dayOfYear = max(1, calendar.ordinality(of: .day, in: .year, for: .now) ?? 1)
+        let weekday = calendar.component(.weekday, from: .now)
+        let elapsedWeekDays = ((weekday - calendar.firstWeekday + 7) % 7) + 1
+
+        let projection: TimeInterval
+        let period: String
+        switch timeframe {
+        case .day:
+            projection = observedSeconds * Double(daysInMonth)
+            period = "mês"
+        case .week:
+            projection = observedSeconds / Double(elapsedWeekDays) * Double(daysInMonth)
+            period = "mês"
+        case .month:
+            projection = observedSeconds / Double(dayOfMonth) * Double(daysInMonth)
+            period = "mês"
+        case .year:
+            let daysInYear = calendar.range(of: .day, in: .year, for: .now)?.count ?? 365
+            projection = observedSeconds / Double(dayOfYear) * Double(daysInYear)
+            period = "ano"
+        }
+
+        let pool = activityPool(for: preferences)
+        let customIDs = Set(preferences.customActivities.map { "custom_\($0.id.uuidString)" })
+
+        var preds: [ActivityPrediction] = []
+
+        for activity in pool {
+            let activitySeconds = activity.durationMinutes * 60
+            let projectedCount = projection / activitySeconds
+
+            let upperLimit = period == "mês" ? 20.0 : 60.0
+            if projectedCount >= 1 && projectedCount <= upperLimit {
+                preds.append(ActivityPrediction(
+                    name: activity.name,
+                    emoji: activity.emoji,
+                    projectedCount: projectedCount,
+                    period: period,
+                    isCustom: customIDs.contains(activity.id)
+                ))
+            }
+        }
+
+        // Custom activities first, then by most "relatable" count
+        let sorted = preds.sorted { a, b in
+            if a.isCustom != b.isCustom { return a.isCustom }
+            return abs(a.projectedCount - 5) < abs(b.projectedCount - 5)
+        }
+        return Array(sorted.prefix(2))
+    }
+
+    private static func activityPool(for preferences: UserPreferences) -> [Activity] {
+        guard preferences.hasAnyPreferences else { return [] }
+
+        let selectedBuiltIn = all.filter { preferences.selectedActivityIDs.contains($0.id) }
+        let customActivities = preferences.customActivities.map { $0.toActivity() }
+
+        return selectedBuiltIn + customActivities
     }
 }

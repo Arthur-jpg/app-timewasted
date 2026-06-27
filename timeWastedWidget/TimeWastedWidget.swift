@@ -9,10 +9,14 @@ struct WidgetEntry: TimelineEntry {
 
     static var sample: WidgetEntry {
         let seconds = ScreenTimeSummary.sample.dailySeconds
+        let samplePreferences = UserPreferences(
+            selectedActivityIDs: ["gym", "read_chapter", "run_5k"],
+            customActivities: []
+        )
         return WidgetEntry(
             date: .now,
             dailySeconds: seconds,
-            translations: ActivityDatabase.translations(for: seconds, timeframe: .day),
+            translations: ActivityDatabase.translations(for: seconds, timeframe: .day, preferences: samplePreferences),
             isSampleData: true
         )
     }
@@ -40,7 +44,8 @@ struct TimeWastedProvider: TimelineProvider {
         let hasSavedData = SharedDefaults.hasDailyData(inLastDays: 1)
 
         let seconds = hasSavedData ? daily : 0
-        let translations = ActivityDatabase.translations(for: seconds, timeframe: .day)
+        let preferences = SharedDefaults.loadUserPreferences()
+        let translations = ActivityDatabase.translations(for: seconds, timeframe: .day, preferences: preferences)
 
         return WidgetEntry(
             date: .now,

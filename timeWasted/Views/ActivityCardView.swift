@@ -34,8 +34,8 @@ struct ActivityCardView: View {
                         .fontWeight(.semibold)
                         .foregroundStyle(.primary)
 
-                    if translation.count > 1 {
-                        Text("×\(translation.count)")
+                    if translation.isPartial || translation.count > 1 {
+                        Text(translation.badgeText)
                             .font(.caption)
                             .fontWeight(.bold)
                             .padding(.horizontal, 6)
