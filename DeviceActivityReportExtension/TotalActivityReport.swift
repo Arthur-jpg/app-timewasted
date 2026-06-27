@@ -1,6 +1,7 @@
 import _DeviceActivity_SwiftUI
 import DeviceActivity
 import SwiftUI
+import WidgetKit
 
 struct ActivityReportConfiguration {
     let totalSeconds: TimeInterval
@@ -26,6 +27,10 @@ struct TotalActivityReport: DeviceActivityReportScene {
                     }
                 }
             }
+        }
+        if lastUpdated != .distantPast {
+            SharedDefaults.saveReportSeconds(total, for: timeframe)
+            WidgetCenter.shared.reloadTimelines(ofKind: "TimeWastedWidget")
         }
         return ActivityReportConfiguration(
             totalSeconds: total,

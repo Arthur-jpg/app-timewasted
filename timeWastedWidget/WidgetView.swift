@@ -15,10 +15,11 @@ struct TimeWastedWidgetView: View {
 
     private var smallView: some View {
         VStack(alignment: .leading, spacing: 7) {
-            Text("ENQUANTO VOCÊ GASTAVA TEMPO...")
+            Text(entry.title.uppercased())
                 .font(.system(size: 10, weight: .bold))
                 .foregroundStyle(.secondary)
                 .tracking(0.3)
+                .lineLimit(2)
 
             if let first = entry.translations.first {
                 HStack(alignment: .firstTextBaseline, spacing: 6) {
@@ -42,7 +43,7 @@ struct TimeWastedWidgetView: View {
 
             Spacer(minLength: 0)
 
-            Text("≈ \(formatTime(entry.dailySeconds)) nas redes hoje")
+            Text("≈ \(formatTime(entry.seconds)) nas redes \(entry.periodLabel)")
                 .font(.caption2)
                 .foregroundStyle(.secondary)
                 .lineLimit(1)
@@ -53,12 +54,14 @@ struct TimeWastedWidgetView: View {
     private var mediumView: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack(alignment: .firstTextBaseline) {
-                Text("Enquanto você gastava tempo")
+                Text(entry.title)
                     .font(.headline.weight(.bold))
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.7)
 
                 Spacer(minLength: 8)
 
-                Text("≈ \(formatTime(entry.dailySeconds)) hoje")
+                Text("≈ \(formatTime(entry.seconds)) \(entry.periodLabel)")
                     .font(.caption.weight(.semibold))
                     .foregroundStyle(.secondary)
                     .lineLimit(1)
