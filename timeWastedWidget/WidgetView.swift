@@ -43,7 +43,7 @@ struct TimeWastedWidgetView: View {
 
             Spacer(minLength: 0)
 
-            Text("≈ \(formatTime(entry.seconds)) nas redes \(entry.periodLabel)")
+            Text("\(formatTime(entry.seconds)) nas redes \(entry.periodLabel)")
                 .font(.caption2)
                 .foregroundStyle(.secondary)
                 .lineLimit(1)
@@ -61,7 +61,7 @@ struct TimeWastedWidgetView: View {
 
                 Spacer(minLength: 8)
 
-                Text("≈ \(formatTime(entry.seconds)) \(entry.periodLabel)")
+                Text("\(formatTime(entry.seconds)) \(entry.periodLabel)")
                     .font(.caption.weight(.semibold))
                     .foregroundStyle(.secondary)
                     .lineLimit(1)

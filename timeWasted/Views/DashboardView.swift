@@ -17,7 +17,6 @@ struct DashboardView: View {
     @State private var selectedTab: TimeFrame = .day
     @State private var showingPicker = false
     @State private var showingPreferences = false
-    @State private var showDebug = false
     @State private var reportEndDate = Date.now
     @State private var userPreferences = SharedDefaults.loadUserPreferences()
     @State private var userPreferencesRevision = SharedDefaults.userPreferencesRevision
@@ -68,22 +67,12 @@ struct DashboardView: View {
                         Image(systemName: "slider.horizontal.3")
                     }
                 }
-                ToolbarItem(placement: .topBarLeading) {
-                    Button {
-                        showDebug = true
-                    } label: {
-                        Image(systemName: "ant.circle")
-                    }
-                }
             }
             .sheet(isPresented: $showingPicker) {
                 appPickerSheet
             }
             .sheet(isPresented: $showingPreferences, onDismiss: refreshUserPreferences) {
                 ActivityPreferencesView()
-            }
-            .sheet(isPresented: $showDebug) {
-                debugSheet
             }
             .onAppear {
                 manager.refreshSummary()
@@ -198,92 +187,6 @@ struct DashboardView: View {
             RoundedRectangle(cornerRadius: 14)
                 .fill(Color(.systemGroupedBackground))
         )
-    }
-
-    private var debugSheet: some View {
-        let ud = SharedDefaults.container
-        let containerOk = ud != nil
-        let rawDaily = SharedDefaults.loadDailySeconds()
-        let extensionInit = ud?.object(forKey: SharedDefaults.Keys.debugExtensionInit) as? Date
-        let monitorStart = ud?.object(forKey: SharedDefaults.Keys.debugMonitorLastStart) as? Date
-        let lastThreshold = ud?.string(forKey: SharedDefaults.Keys.debugMonitorLastThreshold)
-        let lastThresholdTime = ud?.object(forKey: SharedDefaults.Keys.debugMonitorLastThresholdTime) as? Date
-        let notificationEvaluation = ud?.object(forKey: SharedDefaults.Keys.debugNotificationLastEvaluation) as? Date
-        let notificationAttempt = ud?.string(forKey: SharedDefaults.Keys.debugNotificationLastAttempt)
-        let notificationSuccess = ud?.object(forKey: SharedDefaults.Keys.debugNotificationLastSuccess) as? Date
-        let notificationError = ud?.string(forKey: SharedDefaults.Keys.debugNotificationLastError)
-        let containerAccessible = ud?.bool(forKey: SharedDefaults.Keys.debugContainerAccessible) ?? false
-        let systemAuthStatus = AuthorizationCenter.shared.authorizationStatus
-        let fmt = DateFormatter()
-        fmt.dateFormat = "HH:mm:ss"
-
-        let authLabel: String = {
-            switch systemAuthStatus {
-            case .notDetermined: return "⚠️ não autorizado"
-            case .approved: return "✅ aprovado"
-            case .denied: return "❌ negado"
-            @unknown default: return "desconhecido"
-            }
-        }()
-
-        return NavigationStack {
-            List {
-                Section("Autorização") {
-                    row("Screen Time (sistema)", authLabel)
-                    if systemAuthStatus != .approved {
-                        Button("Autorizar agora") {
-                            Task { await manager.requestAuthorization() }
-                        }
-                        .foregroundStyle(.blue)
-                    }
-                }
-                Section("App Group") {
-                    row("Container acessível (app)", containerOk ? "✅ sim" : "❌ nil")
-                    row("Container acessível (extension)", containerAccessible ? "✅ sim" : "❌ nunca gravou")
-                }
-                Section("Monitor Extension") {
-                    row("Extension init", extensionInit.map { "✅ \(fmt.string(from: $0))" } ?? "❌ processo nunca foi lançado")
-                    row("intervalDidStart", monitorStart.map { "✅ \(fmt.string(from: $0))" } ?? "❌ nunca disparou")
-                    row("Último threshold", lastThreshold ?? "❌ nunca disparou")
-                    row("Horário do threshold", lastThresholdTime.map { fmt.string(from: $0) } ?? "—")
-                }
-                Section("Dados") {
-                    row("Raw daily seconds", String(format: "%.0fs (%.1f min)", rawDaily, rawDaily / 60))
-                    row("isSampleData", manager.summary.isSampleData ? "sim (sem dados reais)" : "não (dados reais)")
-                    row("Last updated", fmt.string(from: manager.summary.lastUpdated))
-                }
-                Section("Notificações") {
-                    row("Última avaliação", notificationEvaluation.map { fmt.string(from: $0) } ?? "—")
-                    row("Última tentativa", notificationAttempt ?? "—")
-                    row("Último sucesso", notificationSuccess.map { fmt.string(from: $0) } ?? "—")
-                    row("Último erro", notificationError ?? "—")
-                }
-                Section("Ações") {
-                    Button("Forçar refreshSummary") { manager.refreshSummary() }
-                    Button("Limpar dados de debug", role: .destructive) {
-                        ud?.removeObject(forKey: SharedDefaults.Keys.debugExtensionInit)
-                        ud?.removeObject(forKey: SharedDefaults.Keys.debugMonitorLastStart)
-                        ud?.removeObject(forKey: SharedDefaults.Keys.debugMonitorLastThreshold)
-                        ud?.removeObject(forKey: SharedDefaults.Keys.debugMonitorLastThresholdTime)
-                    }
-                }
-            }
-            .navigationTitle("Debug")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Fechar") { showDebug = false }
-                }
-            }
-        }
-    }
-
-    private func row(_ label: String, _ value: String) -> some View {
-        HStack {
-            Text(label).foregroundStyle(.secondary)
-            Spacer()
-            Text(value).font(.caption.monospaced()).multilineTextAlignment(.trailing)
-        }
     }
 
     private var appPickerSheet: some View {
